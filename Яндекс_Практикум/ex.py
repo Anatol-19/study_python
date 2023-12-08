@@ -1,14 +1,46 @@
-may_2017 = [24, 26, 15, 10, 15, 19, 10, 1, 4, 7, 7, 7, 12, 14, 17, 8, 9, 19, 21, 22, 11, 15, 19, 23, 15, 21, 16, 13, 25, 17, 19]
-may_2018 = [20, 27, 23, 18, 24, 16, 20, 24, 18, 15, 19, 25, 24, 26, 19, 24, 25, 21, 17, 11, 20, 21, 22, 23, 18, 20, 23, 18, 22, 23, 11]
+mobile_devices = {
+    'cucuPhone': 2010,
+    'cucuBlet': 2013,
+    'cucuClock': 2015,
+    'cucuEar': 2018,
+    'cuCube': 2015,
+}
 
-def comfort_count(temperatures):
-    count = 0
-    for temp in temperatures:
-        if 22 <= temp <= 26:
-            count += 1
-    print("Количество тёплых дней в этом месяце: " + str(count))
+home_devices = {
+    'cucuLot': 2011,
+    'cucuBlock': 2010,
+    'cucuWall': 2010,
+    'cucuMonitor': 2020,
+    'cucuLamp': 2015,
+    'cucuTable': 2016,
+    'cucuTV': 2017,
+}
+
+not_supported_devices = {'cucuBlock', 'cucuBlet', 'cucuWall'}
+
+result_catalog = {}
 
 
-# Дальше код не меняйте
-comfort_count(may_2017)  # Узнаем, что было в мае 2017 г.
-comfort_count(may_2018)  # Узнаем, что было в мае 2018 г.
+
+# Допишите функцию выборки поддерживаемого девайса из словаря
+def get_supported_catalog(dict_devices, device):
+    supported_catalog = {}
+    if device in dict_devices:
+        supported_catalog[device] = dict_devices[device]
+    return supported_catalog
+
+
+all_devices = set(mobile_devices).union(set(home_devices))
+supported_devices = all_devices.difference(set(not_supported_devices))
+
+for device in supported_devices:
+    supported_mob_dev = get_supported_catalog(mobile_devices, device)
+    # Добавьте значение в словарь result_catalog
+    result_catalog.update(supported_mob_dev)
+    supported_home_dev = get_supported_catalog(home_devices, device)
+    # Добавьте значение в словарь result_catalog
+    result_catalog.update(supported_home_dev)
+
+
+print('Каталог поддерживаемых девайсов: ')
+print(result_catalog)
