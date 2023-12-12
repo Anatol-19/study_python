@@ -1,22 +1,60 @@
-def get_together_games(games_1, games_2):
-    together_games = set(games_1).intersection(set(games_2))   
-    return together_games
+DATABASE = {
+    'Серёга': 'Омск',
+    'Соня': 'Москва',
+    'Миша': 'Москва',
+    'Дима': 'Челябинск',
+    'Алина': 'Красноярск',
+    'Егор': 'Пермь',
+    'Коля': 'Красноярск'
+}
+# Грамотность Анфисы
+def format_friends_count(friends_count):
+    if friends_count == 1:
+        return '1 друг'
+    elif 2 <= friends_count <= 4:
+        return f'{friends_count} друга'
+    else:
+        return f'{friends_count} друзей'
 
-anfisa_games = [
-    'Online-chess',
-    'Города',
-    'DOOM',
-    'Крестики-нолики'
-]
-alisa_games = [
-    'DOOM',
-    'Online-chess',
-    'Города',
-    'GTA',
-    'World of tanks'
-]
-# Вызовите функцию со списками игр в качестве параметров
-together_games = get_together_games(anfisa_games, alisa_games)
-# Напечатайте итоговый перечень игр в цикле
-for game in together_games:
-    print("👾", game)
+
+def process_anfisa(query):
+    if query == 'сколько у меня друзей?':
+        count = len(DATABASE)
+        return f'У тебя {format_friends_count(count)}.'
+    elif query == 'кто все мои друзья?':
+        friends_string = ', '.join(DATABASE)
+        return f'Твои друзья: {friends_string}'
+    elif query == 'где все мои друзья?':
+        unique_cities = set(DATABASE.values())
+        cities_string = ', '.join(unique_cities)
+        return f'Твои друзья в городах: {cities_string}'
+    else:
+        return '<неизвестный запрос>'
+
+def process_friend(name, query):
+    if name in DATABASE:
+        if query == 'ты где?':
+            city = DATABASE[name]            
+            return f'{name} в городе {city}'
+        else:
+             return print(f'<неизвестный запрос>')
+    else:
+        return print(f'У тебя нет друга по имени {name}')    
+    
+def process_query(query):
+    query_list = query.split(', ')
+    #print(query_list)
+    if query_list[0] == "Анфиса":
+        return process_anfisa(query_list[1]) 
+    else:
+        process_friend('query_list[0]', 'query_list[1]')
+
+
+print('Привет, я Анфиса!')
+print(process_query('Анфиса, сколько у меня друзей?'))
+print(process_query('Анфиса, кто все мои друзья?'))
+print(process_query('Анфиса, где все мои друзья?'))
+print(process_query('Анфиса, кто виноват?'))
+print(process_query('Соня, ты где?'))
+print(process_query('Коля, что делать?'))
+print(process_query('Антон, ты где?')) 
