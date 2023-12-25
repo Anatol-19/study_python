@@ -17,6 +17,10 @@ def test_capitilize():
     rest = util.capitilize(xs)
     assert rest == x_cap
 
+def test_capitilize():
+    rest = util.capitilize(xs)
+    assert rest == x_cap
+
 def test_trim():
     rest = util.trim(xs)
     assert rest == x_trim
