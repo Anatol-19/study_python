@@ -1,23 +1,11 @@
-def print_valid_cities(all, used):
-    valid_cities = all.difference(used)
-    for city in valid_cities:
-        print(city)
-        used.add(city)
-    # Вместо этого многоточия напишите код функции, она должна
-    # принимать и обрабатывать аргументы all_cities и used_cities,
-    # а затем печатать результат в нужном формате
+tuple = {}
 
-all_cities = {
-    'Абакан',
-    'Астрахань', 
-    'Бобруйск', 
-    'Калуга',
-    'Караганда',
-    'Кострома',
-    'Липецк', 
-    'Новосибирск'
-}
+tuple[(1, 2, 4)] = 8
+tuple[(4, 2, 1)] = 10
+tuple[(1, 2)] = 12
 
-used_cities = {'Калуга', 'Абакан' , 'Новосибирск'}
+sum = 0
+for k in tuple:
+    sum += tuple[k]
 
-print_valid_cities(all_cities, used_cities)
+print(f'{len(tuple)}+{sum}')

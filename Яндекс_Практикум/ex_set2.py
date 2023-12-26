@@ -70,7 +70,8 @@ def process_friend(name, query):
         if query == 'ты где?':
             return f'{name} в городе {city}'
         elif query == 'который час?':
-            return f'{what_time(DATABASE[name])}
+
+            return f'Там сейчас {what_time(DATABASE[name])}.strftime(%H:%M)'
         else:
             return '<неизвестный запрос>'
     else:
