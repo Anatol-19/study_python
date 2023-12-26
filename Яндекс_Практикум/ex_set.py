@@ -8,4 +8,4 @@ sum = 0
 for k in tuple:
     sum += tuple[k]
 
-print(f'{len(tuple)}+{sum}')
+print(f'{len(tuple) + sum}')

@@ -1,46 +1,110 @@
-mobile_devices = {
-    'cucuPhone': 2010,
-    'cucuBlet': 2013,
-    'cucuClock': 2015,
-    'cucuEar': 2018,
-    'cuCube': 2015,
+import datetime as dt
+
+DATABASE = {
+    'Сергей': 'Омск',
+    'Соня': 'Москва',
+    'Алексей': 'Калининград',
+    'Миша': 'Москва',
+    'Дима': 'Челябинск',
+    'Алина': 'Красноярск',
+    'Егор': 'Пермь',
+    'Коля': 'Красноярск',
+    'Артём': 'Владивосток',
+    'Петя': 'Михайловка'
 }
 
-home_devices = {
-    'cucuLot': 2011,
-    'cucuBlock': 2010,
-    'cucuWall': 2010,
-    'cucuMonitor': 2020,
-    'cucuLamp': 2015,
-    'cucuTable': 2016,
-    'cucuTV': 2017,
+UTC_OFFSET = {
+    'Москва': 3,
+    'Санкт-Петербург': 3,
+    'Новосибирск': 7,
+    'Екатеринбург': 5,
+    'Нижний Новгород': 3,
+    'Казань': 3,
+    'Челябинск': 5,
+    'Омск': 6,
+    'Самара': 4,
+    'Ростов-на-Дону': 3,
+    'Уфа': 5,
+    'Красноярск': 7,
+    'Воронеж': 3,
+    'Пермь': 5,
+    'Волгоград': 3,
+    'Краснодар': 3,
+    'Калининград': 2,
+    'Владивосток': 10
 }
 
-not_supported_devices = {'cucuBlock', 'cucuBlet', 'cucuWall'}
 
-result_catalog = {}
-
-
-
-# Допишите функцию выборки поддерживаемого девайса из словаря
-def get_supported_catalog(dict_devices, device):
-    supported_catalog = {}
-    if device in dict_devices:
-        supported_catalog[device] = dict_devices[device]
-    return supported_catalog
+def format_count_friends(count_friends):
+    if count_friends == 1:
+        return '1 друг'
+    elif 2 <= count_friends <= 4:
+        return f'{count_friends} друга'
+    else:
+        return f'{count_friends} друзей'
 
 
-all_devices = set(mobile_devices).union(set(home_devices))
-supported_devices = all_devices.difference(set(not_supported_devices))
+def what_time(city):
+    if city in UTC_OFFSET:
+        offset = UTC_OFFSET[city]
+        city_time = dt.datetime.utcnow() + dt.timedelta(hours=offset)
+        f_time = city_time.strftime("%H:%M")
+        return f_time
+    else:
+        return f'не могу определить время в городе {city}'
 
-for device in supported_devices:
-    supported_mob_dev = get_supported_catalog(mobile_devices, device)
-    # Добавьте значение в словарь result_catalog
-    result_catalog.update(supported_mob_dev)
-    supported_home_dev = get_supported_catalog(home_devices, device)
-    # Добавьте значение в словарь result_catalog
-    result_catalog.update(supported_home_dev)
+def process_anfisa(query):
+    if query == 'сколько у меня друзей?':
+        count = len(DATABASE)
+        return f'У тебя {format_count_friends(count)}.'
+    elif query == 'кто все мои друзья?':
+        friends_string = ', '.join(DATABASE)
+        return f'Твои друзья: {friends_string}'
+    elif query == 'где все мои друзья?':
+        unique_cities = set(DATABASE.values())
+        cities_string = ', '.join(unique_cities)
+        return f'Твои друзья в городах: {cities_string}'
+    else:
+        return '<неизвестный запрос>'
 
 
-print('Каталог поддерживаемых девайсов: ')
-print(result_catalog)
+def process_friend(name, query):
+    if name in DATABASE:
+        city = DATABASE[name]
+        if query == 'ты где?':
+            return f'{name} в городе {city}'
+        elif query == 'который час?':
+            sity_time = what_time(DATABASE[name])
+            return f'Там сейчас', {sity_time}
+        else:
+            return '<неизвестный запрос>'
+    else:
+        return f'У тебя нет друга по имени {name}'
+
+
+def process_query(query):
+    elements = query.split(', ')
+    if elements[0] == 'Анфиса':
+        return process_anfisa(elements[1])
+    else:
+        return process_friend(elements[0], elements[1])
+
+
+def runner():
+    queries = [
+        'Анфиса, сколько у меня друзей?',
+        'Анфиса, кто все мои друзья?',
+        'Анфиса, где все мои друзья?',
+        'Анфиса, кто виноват?',
+        'Коля, ты где?',
+        'Соня, что делать?',
+        'Антон, ты где?',
+        'Алексей, который час?',
+        'Артём, который час?',
+        'Антон, который час?',
+        'Петя, который час?'
+    ]
+    for query in queries:
+        print(query, '-', process_query(query))
+
+runner()
