@@ -16,7 +16,7 @@ driver_Ch.get(url)
 
 # 2. Пять раз кликните на кнопку `Add Element`. 
 btn_add_locator = 'button[onclick="addElement()"]'
-btn_add = driver_Ch.find_element(By.CSS_SELECTOR ,btn_add_locator)
+btn_add = driver_Ch.find_element(By.CSS_SELECTOR, btn_add_locator)
 for i in range (0, 5):
     btn_add.click()
 
@@ -32,9 +32,11 @@ driver_Ff = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().instal
 driver_Ff.maximize_window
 driver_Ff.get(url)
 btn_add = driver_Ff.find_element(By.CSS_SELECTOR ,btn_add_locator)
-for i in range (0, 5):
+for i in range (1, 6):
     btn_add.click()
 btn_dlt_list = driver_Ff.find_elements(By.CSS_SELECTOR, btn_dlt_locator)
+driver_Ff.close()
+
 print(f'Колличество кнопок в FireFox -  {len(btn_dlt_list)}')
 
 # sleep(19)
