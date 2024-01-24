@@ -45,4 +45,4 @@ def test_Zip_is_red():
     background = driver.find_element(By.CSS_SELECTOR, '#zip-code').value_of_css_property("background-color")
     assert background == 'rgba(248, 215, 218, 1)'
 
-driver.quit()
+# driver.quit()
