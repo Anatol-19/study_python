@@ -32,17 +32,17 @@ submit = driver.find_element(By.CSS_SELECTOR, "[type='submit']")
 
 submit.click()
 
+def test_sub_is_green():
+    for i in variable:
+        element_id = "#" + i
+        background = driver.find_element(By.CSS_SELECTOR, element_id).value_of_css_property("background-color")
+        if i != 'zip-code':
+            assert background == "rgba(209, 231, 221, 1)"
+
 sleep(1)
 
-for i in variable:
-    id = "#" + i
-    print(id)
-    background = driver.find_element(By.CSS_SELECTOR, i).value_of_css_property("background-color")
-    if i != 'zip-code':
-        assert background == "rgb(209, 231, 221)"
-    else:
-        assert background == 'rgb(245, 194, 199)'
-    # print(f'{i} {background}')
+def test_Zip_is_red():
+    background = driver.find_element(By.CSS_SELECTOR, '#zip-code').value_of_css_property("background-color")
+    assert background == 'rgba(248, 215, 218, 1)'
 
 driver.quit()
-
