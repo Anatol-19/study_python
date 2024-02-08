@@ -43,9 +43,9 @@ def test_trim_with_none():
 # # Принимает на вход текст с разделителем и возвращает список строк.
 @pytest.mark.parametrize("input_string, input_delimeter, expected_output", [
     ## Позитивные тесты
-    ("a,b,c,d", "", ['a', 'b', 'c', 'd']),                       # Разделяем строку с разделителем ",", delimeter не указан
+    ("a,b,c,d", None, ['a', 'b', 'c', 'd']),                     # Разделяем строку с разделителем ",", delimeter не указан
     ("1:2:3", ":", ["1", "2", "3"]),                             # Разделяем строку с разделителем ":"
-    ("gfdboiwoujuiwjiwbnwrn", None, ["gfdboiwoujuiwjiwbnwrn"]),  # Текст без разделителя
+    ("gfdboiwoujuiwjiwbnwrn", None, ["gfdboiwoujuiwjiwbnwrn"]),  # Текст без пробелов и разделителя
     ("123", ".", ["123"]),                                       # Числа как строка
     ## Негативные тесты
     ("", "любой", []),                                           # Пустая строка
@@ -53,6 +53,8 @@ def test_trim_with_none():
 ])
 def test_to_list(input_string, input_delimeter, expected_output):
     assert util.to_list(input_string, input_delimeter) == expected_output
+def test_to_list_no_delimetr():
+    assert util.to_list("a,b,c,d") == ['a', 'b', 'c', 'd']
 def test_to_list_with_none():
     with pytest.raises(AttributeError):
         util.to_list(None)                                       # None
@@ -157,14 +159,14 @@ def test_is_empty_with_none():
 ## Преобразует список элементов в строку с указанным разделителем
 @pytest.mark.parametrize("input_lst, input_joiner, expected_output", [
     ## Позитивные тесты
-    ([1,2,3,4], "", "1, 2, 3, 4"),    # Преобразуем список в строку без разделителя
-    (["Sky", "Pro"], "-", "Sky-Pro"), # Преобразуем список в строку с разделителем "-"
-    ([" ", " ", " "], "", "   "),     # Список с пробелами
-    ([], "", ""),                   # Пустой список
+    ([1,2,3,4], None, "1, 2, 3, 4"),     # Преобразуем список в строку без разделителя
+    (["Sky", "Pro"], "-", "Sky-Pro"),  # Преобразуем список в строку с разделителем "-"
+    ([" ", " ", " "], "", "   "),      # Список с пробелами
+    ([], "", ""),                      # Пустой список
 ])
 def test_list_to_string(input_lst, input_joiner, expected_output):
     assert util.list_to_string(input_lst, input_joiner) == expected_output
     ## Негативные тесты
-# def test_list_to_string_no_list():
-#     with pytest.raises(TypeError):
-#         util.list_to_string("Строка")            # Не List
+def test_list_to_string_no_list():
+    with pytest.raises(TypeError):
+        util.list_to_string({1, 2, 3}) # Не List
