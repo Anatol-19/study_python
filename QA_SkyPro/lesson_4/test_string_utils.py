@@ -1,139 +1,170 @@
 import pytest
 from string_utils import StringUtils
+
 util = StringUtils()
 
-@pytest.mark.parametrize ("input_string, expected_output", [
-    ("skypro", "Skypro"), # Все строчные - Первая заглавная
-    ("Skypro", "Skypro"), # Первая заглавная - Первая заглавная
-    ("123", "123"), # числа как строка
-    ("04 апреля 2023", "04 апреля 2023"), # строка с пробелами
-    (" ", " "), # Строка с пробелом
-    # (None), # None
-    ("", "") # Пустая строка
+# Тест для функции capitilize
+## Принимает на вход текст, делает первую букву заглавной и возвращает этот же текст
+@pytest.mark.parametrize("input_string, expected_output", [
+    ## Позитивные тесты
+    ("skypro", "Skypro"),                 # Приводим первую букву к заглавной
+    ("Skypro", "Skypro"),                 # Первая буква уже заглавная
+    ("123", "123"),                       # Числа как строка
+    ("04 апреля 2023", "04 апреля 2023"), # Строка с пробелами
+    ## Негативные тесты
+    ("", ""),                             # Пустая строка
+    (" ", " ")                            # Строка с пробелом
 ])
-
 def test_capitilize(input_string, expected_output):
-    # Принимает на вход текст, делает первую букву заглавной и возвращает этот же текст
-    rest = util.capitilize(input_string)
-    assert rest == expected_output
+    assert util.capitilize(input_string) == expected_output
+def test_capitalize_with_none():
+    with pytest.raises(AttributeError):
+        util.capitalize(None)              # None
 
-@pytest.mark.parametrize ("input_string, expected_output", [
-    ("   SkyPro", "SkyPro"), # В начале пробелы - нет пробелов
-    ("SkyPro", "SkyPro"), # В начале нет пробелов - нет пробелов
-    ("123", "123"), # числа как строка
-    ("04 апреля 2023", "04 апреля 2023"), # строка с пробелами
-    ("", ""), # Пустая строка
-    (" ", ""), # Строка с пробелом
-    # (None, None), # None
+# Тест для функции trim
+## Принимает на вход текст и удаляет пробелы в начале, если они есть
+@pytest.mark.parametrize("input_string, expected_output", [
+    ## Позитивные тесты
+    ("   SkyPro", "SkyPro"),              # Удаляем пробелы в начале строки
+    ("SkyPro", "SkyPro"),                 # Пробелов в начале нет
+    ("123", "123"),                       # Числа как строка
+    ("04 апреля 2023", "04 апреля 2023"), # Строка с пробелами
+    ## Негативные тесты
+    ("", ""),                             # Пустая строка
+    (" ", "")                             # Пробелы в начале строки
 ])
 def test_trim(input_string, expected_output):
-    # Принимает на вход текст и удаляет пробелы в начале, если они есть
-    rest = util.trim(input_string)
-    assert rest == expected_output
+    assert util.trim(input_string) == expected_output
+def test_trim_with_none():
+    with pytest.raises(AttributeError):
+        util.trim(None)                    # None
 
-@pytest.mark.parametrize ("input_string, input_delimeter, expected_output", [
-    ("a,b,c,d", None, ["a", "b", "c", "d"]), # Текст с разделителем ",", delimeter не указан - список корректный	
-    ("1:2:3", ":", ["1", "2", "3"]), # Текст с разделителем, указанным в delimeter - список корректный
-    ("gfdboiwoujuiwhjgnwfkjnjiwbnwrn", None, ["gfdboiwoujuiwhjgnwfkjnjiwbnwrn"]), # Текст без разделителя - список из 1 пункта
-    ("123", ".", ["123"]), # числа как строка
-    ("", "любой", ""), # Пустая строка
-    (" ", " ", ""), # Строка с пробелом
-    # (None, None, None) # None
-
+# Тест для функции to_list
+# # Принимает на вход текст с разделителем и возвращает список строк.
+@pytest.mark.parametrize("input_string, input_delimeter, expected_output", [
+    ## Позитивные тесты
+    ("a,b,c,d", "", ['a', 'b', 'c', 'd']),                       # Разделяем строку с разделителем ",", delimeter не указан
+    ("1:2:3", ":", ["1", "2", "3"]),                             # Разделяем строку с разделителем ":"
+    ("gfdboiwoujuiwjiwbnwrn", None, ["gfdboiwoujuiwjiwbnwrn"]),  # Текст без разделителя
+    ("123", ".", ["123"]),                                       # Числа как строка
+    ## Негативные тесты
+    ("", "любой", []),                                           # Пустая строка
+    (" ", " ", [])                                               # Пробелы в строке
 ])
-
 def test_to_list(input_string, input_delimeter, expected_output):
-    # Принимает на вход текст с разделителем и возвращает список строк.
-    rest = util.to_list(input_string, input_delimeter)
-    assert rest == expected_output
+    assert util.to_list(input_string, input_delimeter) == expected_output
+def test_to_list_with_none():
+    with pytest.raises(AttributeError):
+        util.to_list(None)                                       # None
 
-@pytest.mark.parametrize ("input_string, input_symbol, expected_output", [
-    ("SkyPro", "S", True), # Символ есть - True
-    ("SkyPro", "U", False), # Символа нет - False
-    ("", "", False), # Пустая строка
-    (" ", " ", True), # Строка с пробелом
-    # (None, "g", False)# None
+# Тест для функции contains
+## Возвращает `True`, если строка содержит искомый символ и `False` - если нет
+@pytest.mark.parametrize("input_string, input_symbol, expected_output", [
+    ## Позитивные тесты
+    ("SkyPro", "S", True),     # Символ есть в строке
+    ("SkyPro", "U", False),    # Символ отсутствует в строке
+    ## Негативные тесты
+    ("", "", True),            # Пустая строка
+    (" ", " ", True)           # Строка с пробелом
 ])
-
 def test_contains(input_string, input_symbol, expected_output):
-    # Возвращает `True`, если строка содержит искомый символ и `False` - если нет
-    rest = util.contains(input_string, input_symbol)
-    assert rest == expected_output
+    assert util.contains(input_string, input_symbol) == expected_output
+def test_contains_with_none():
+    with pytest.raises(TypeError):
+        util.contains(None)    # None
 
-@pytest.mark.parametrize ("input_string, input_symbol, expected_output", [
-    ("SkyPro", "Pro", "Sky"), # “Текст”
-    ("123", "12", "3"), # “123” — числа как строка
-    ("04 апреля 2023", "еля ", "04 апр2023"), # “04 апреля 2023” — строка с пробелами
-    ("SkyPro", "QA Studio", "SkyPro"), # Переданной подстроки нет в строке
-    ("Pro", "SkyPro", "Pro"), # Подстрока больше строки
-    ("", "SkyPro", ""), # Пустая строка
-    (" ", "SkyPro", " "), # Строка с пробелом
-    # (None, "SkyPro", None) # None
+# Тест для функции delete_symbol
+## Удаляет все подстроки из переданной строки
+@pytest.mark.parametrize("input_string, input_symbol, expected_output", [
+    ## Позитивные тесты
+    ("SkyPro", "k", "SyPro"),                 # Удаляем символ 1 символ
+    ("123", "12", "3"),                       # Удаляем символы из строки с числами
+    ("04 апреля 2023", "еля ", "04 апр2023"), # Удаляем несколько символов, чтрока с пробелом
+    ("SkyPro", "QA Studio", "SkyPro"),        # Подстроки нет в строке
+    ## Негативные тесты
+    ("Pro", "SkyPro", "Pro"),                 # Подстрока длиннее строки
+    ("", "SkyPro", ""),                       # Пустая строка
+    (" ", "SkyPro", " ")                      # Строка с пробелом
 ])
-
 def test_delete_symbol(input_string, input_symbol, expected_output):
-    # Удаляет все подстроки из переданной строки
-    rest = util.delete_symbol(input_string, input_symbol)
-    assert rest == expected_output
+    assert util.delete_symbol(input_string, input_symbol) == expected_output
+def test_delete_symbol_with_none():
+    with pytest.raises(TypeError):
+        util.delete_symbol(None)              # None
 
-@pytest.mark.parametrize ("input_string, input_symbol, expected_output", [
-    ("SkyPro", "S", True), # “Текст” - начинается с заданного символа - Возвращает `True'
-    ("SkyPro", "P", False), # “Текст” - НЕ начинается с заданного символа - Возвращает `False`
-    ("123", "1", True), # “123” — числа как строка - начинается с заданного символа - Возвращает `True
-    ("123", "9", False), # “123” — числа как строка -  НЕ начинается с заданного символа - Возвращает `False`
-    ("04 апреля 2023", "0", True), # “04 апреля 2023” — строка с пробелами -  начинается с заданного символа - Возвращает `True  
-    ("04 апреля 2023", "4", False), # “04 апреля 2023” — строка с пробелами - строка НЕ начинается с заданного символа - Возвращает `False` 
-    ("", "", False), # Пустая строка
-    (" ", " ", True), # Строка с пробелом
-    # (None, "S", False), # None
+
+# Тест для функции starts_with
+## Возвращает `True`, если строка начинается с заданного символа и `False` - если нет 
+@pytest.mark.parametrize("input_string, input_symbol, expected_output", [
+    ## Позитивные тесты
+    ("SkyPro", "S", True),          # Строка начинается с заданного символа
+    ("SkyPro", "P", False),         # Строка НЕ начинается с заданного символа
+    ("123", "1", True),             # Строка начинается с заданного числа
+    ("123", "9", False),            # Строка НЕ начинается с заданного числа
+    ("04 апреля 2023", "0", True),  # Строка (буквы, цифры, пробелы) начинается с заданного символа
+    ("04 апреля 2023", "а", False), # Строка (буквы, цифры, пробелы) НЕ начинается с заданного символа
+    ## Негативные тесты
+    ("", "", True),                 # Пустая строка
+    (" ", " ", True)                # Строка содержит пробел
 ])
+def test_starts_with(input_string, input_symbol, expected_output):
+    assert util.starts_with(input_string, input_symbol) == expected_output
+def test_starts_with_none():
+    with pytest.raises(TypeError):
+        util.starts_with(None)      # None
 
-def test_start_with(input_string, input_symbol, expected_output):
-    # Возвращает `True`, если строка начинается с заданного символа и `False` - если нет 
-    rest = util.starts_with(input_string, input_symbol)
-    assert rest == expected_output
-
-@pytest.mark.parametrize ("input_string, input_symbol, expected_output", [
-    ("SkyPro", "o", True), # “Текст” - заканчивается с заданного символа - Возвращает `True'
-    ("SkyPro", "P", False), # “Текст” - НЕ заканчивается с заданного символа - Возвращает `False`
-    ("123", "3", True), # “123” — числа как строка - заканчивается с заданного символа - Возвращает `True
-    ("123", "9", False), # “123” — числа как строка -  НЕ заканчивается с заданного символа - Возвращает `False`
-    ("04 апреля 2023", "3", True), # “04 апреля 2023” — строка с пробелами -  заканчивается с заданного символа - Возвращает `True  
-    ("04 апреля 2023", "4", False), # “04 апреля 2023” — строка с пробелами - строка НЕ заканчивается с заданного символа - Возвращает `False` 
-    ("", "", False), # Пустая строка
-    (" ", " ", True), # Строка с пробелом
-    # (None, "S", False), # None
+# Тест для функции end_with
+## строка заканчивается заданным символом - Возвращает `True'
+@pytest.mark.parametrize("input_string, input_symbol, expected_output", [
+    ## Позитивные тесты
+    ("SkyPro", "o", True),           # Строка заканчивается заданным символом
+    ("SkyPro", "P", False),          # Строка НЕ заканчивается заданным символом
+    ("123", "3", True),              # Строка заканчивается заданным числом
+    ("123", "9", False),             # Строка НЕ заканчивается заданным числом
+    ("04 апреля 2023", "3", True),   # Строка (буквы, цифры, пробелы) заканчивается заданным символом
+    ("04 апреля 2023", "4", False),  # Строка (буквы, цифры, пробелы) НЕ заканчивается заданным символом
+    ## Негативные тесты
+    ("", "", True),                  # Пустая строка
+    (" ", " ", True)                 # Строка с пробелом
 ])
-
 def test_end_with(input_string, input_symbol, expected_output):
-    # строка заканчивается заданным символом - Возвращает `True'
-    rest = util.end_with(input_string, input_symbol)
-    assert rest == expected_output
+    assert util.end_with(input_string, input_symbol) == expected_output
+def test_end_with_none():
+    with pytest.raises(TypeError):
+        util.end_with(None)          # None
 
-@pytest.mark.parametrize ("input_string, expected_output", [
-    ("", True), # Пустая строка - Возвращает True
-    (" ", True), # с 1 пробелом - Возвращает True
-    ("        ", True), # с 2-3 пробелами - Возвращает True
-    # (None, True), # None - Возвращает True
-    ("S", False), # 1 символ - Возвращает False
-    ("Тест", False), # "Тест" — не пустая строка - Возвращает False
-    ("123", False), # 123 — числа как строка - Возвращает False
-    ("04 апреля 2023", False), # "04 апреля 2023" — строка с пробелами -  - Возвращает False
-]) 
-
-def test_is_empty(input_string, expected_output):
-    # Возвращает `True`, если строка пустая и `False` - если нет
-    rest = util.is_empty(input_string)
-    assert rest == expected_output
-
-@pytest.mark.parametrize ("input_lst, input_joiner, expected_output", [
-    ([1,2,3,4], "", "1, 2, 3, 4"), # Список и не указан разделитель - Преобразует список элементов в строку
-    (["Sky", "Pro"], "-", "Sky-Pro"), # Список и разделитель - Преобразует список элементов в строку с указанным разделителем
-    # ([], None, ""), # Пустой список — [ ] станет ""
-    ([" ", " ", " "], "", "   "), # Список с пробелами — строка с пробелами
+# Тест для функции is_empty
+## Возвращает `True`, если строка пустая и `False` - если нет
+@pytest.mark.parametrize("input_string, expected_output", [    
+    ## Позитивные тесты
+    ("", True),                 # Пустая строка
+    (" ", True),                # 1 пробел в строке
+    ("        ", True),         # Много пробелов в строке
+    ("S", False),               # Строка с 1 символом
+    ("Тест", False),            # Строка несколькими символами
+    ("123", False),             # Числа как строка
+    ("04 апреля 2023", False)   # Строка с пробелами
 ])
+def test_is_empty(input_string, expected_output):
+    assert util.is_empty(input_string) == expected_output
+    ## Негативные тесты
+def test_is_empty_with_none():
+     with pytest.raises(AttributeError):
+         util.is_empty(None)     # None
+         util.is_empty([1,8])    # Тип данных не строка
 
-def test_to_string(input_lst, input_joiner, expected_output):
-    # Преобразует список элементов в строку с указанным разделителем
-    rest = util.list_to_string(input_lst, input_joiner)
-    assert rest == expected_output
+# Тест для функции list_to_string
+## Преобразует список элементов в строку с указанным разделителем
+@pytest.mark.parametrize("input_lst, input_joiner, expected_output", [
+    ## Позитивные тесты
+    ([1,2,3,4], "", "1, 2, 3, 4"),    # Преобразуем список в строку без разделителя
+    (["Sky", "Pro"], "-", "Sky-Pro"), # Преобразуем список в строку с разделителем "-"
+    ([" ", " ", " "], "", "   "),     # Список с пробелами
+    ([], "", ""),                   # Пустой список
+])
+def test_list_to_string(input_lst, input_joiner, expected_output):
+    assert util.list_to_string(input_lst, input_joiner) == expected_output
+    ## Негативные тесты
+# def test_list_to_string_no_list():
+#     with pytest.raises(TypeError):
+#         util.list_to_string("Строка")            # Не List
