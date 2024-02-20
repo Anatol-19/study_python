@@ -12,10 +12,11 @@ def browser():
     yield driver
     driver.quit()
 
-@pytest.mark.parametrize("url", [("https://bonigarcia.dev/selenium-webdriver-java/slow-calculator.html")])                        
-def test_45(browser, url):
-    clk = calculator_c(browser, url);
-    result = sum(46)
-    print(result)
-    print(type(result))
-    assert result == "15"
+@pytest.mark.parametrize("url, wtr", [
+    ("https://bonigarcia.dev/selenium-webdriver-java/slow-calculator.html", 45)
+    ])
+def test_45(browser, url, wtr):
+    clk = calculator_c(browser, url)
+    clk.waiter(wtr)
+    result = clk.sum_15(wtr+1)
+    assert result == 15
