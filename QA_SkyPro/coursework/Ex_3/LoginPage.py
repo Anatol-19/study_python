@@ -10,7 +10,7 @@ class ShopMethods():
         return finder
     
     def authorization(self, login, password):
-        login_field = self.find("#user-name")
+        login_field = self.find("#use`r-name")
         password_field = self.find("#password")
 
         login_field.clear()
