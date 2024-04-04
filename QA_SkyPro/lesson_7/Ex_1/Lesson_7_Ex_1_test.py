@@ -3,6 +3,8 @@ from PageObject_7_1 import DatatypesPage
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 @pytest.fixture
 def browser():
@@ -36,21 +38,20 @@ def test_1(browser, First_name, Last_name, Address, Email, Phone_number, Zip_cod
     
 # 3. Нажмите кнопку Submit.
     page.clk_Submit()
+# Дождаться исчезновения модального окна
+    # WebDriverWait(browser, 10).until_not(EC.visibility_of_element_located((By.CSS_SELECTOR, ".modal")))
+
     
-# 4. Проверьте (assert), что поле `Zip code` подсвечено красным.
-
-# def test_sub_is_green_Zip_is_red(browser, inpt, url):
-#     dt = DataTypes(browser)
-#     dt.open_page(url)
-#     dt.input_form(inpt)
-#     dt.submit_clk()
-
-#     for i in inpt:
-#         element_id = "#" + i
-#         background = browser.find_element(By.CSS_SELECTOR, element_id).value_of_css_property("background-color")
-#         if i != 'zip-code':
-#             assert background == "rgba(209, 231, 221, 1)"
-
-#     background = browser.find_element(By.CSS_SELECTOR, '#zip-code').value_of_css_property("background-color")
-#     assert background == 'rgba(248, 215, 218, 1)'
-# 5. Проверьте (assert), что остальные поля подсвечены зеленым.
+# 4. Проверьте (assert), что поле `Zip code` подсвечено красным. rgba(248, 215, 218, 1)
+    assert page.bkgr_Zip_code() == "rgba(248, 215, 218, 1)"
+    
+# 5. Проверьте (assert), что остальные поля подсвечены зеленым. rgba(209, 231, 221, 1)
+    assert page.bkgr_First_name() == 'rgba(209, 231, 221, 1)'
+    assert page.bkgr_Last_name() == 'rgba(209, 231, 221, 1)'
+    assert page.bkgr_Address() == 'rgba(209, 231, 221, 1)'
+    assert page.bkgr_City() == 'rgba(209, 231, 221, 1)'
+    assert page.bkgr_Country() == 'rgba(209, 231, 221, 1)'
+    assert page.bkgr_Email() == 'rgba(209, 231, 221, 1)'
+    assert page.bkgr_Phone_number() == 'rgba(209, 231, 221, 1)'
+    assert page.bkgr_Job_position() == 'rgba(209, 231, 221, 1)'
+    assert page.bkgr_Company() == 'rgba(209, 231, 221, 1)'
