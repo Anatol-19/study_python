@@ -38,20 +38,17 @@ def test_1(browser, First_name, Last_name, Address, Email, Phone_number, Zip_cod
     
 # 3. Нажмите кнопку Submit.
     page.clk_Submit()
-# Дождаться исчезновения модального окна
-    # WebDriverWait(browser, 10).until_not(EC.visibility_of_element_located((By.CSS_SELECTOR, ".modal")))
-
     
 # 4. Проверьте (assert), что поле `Zip code` подсвечено красным. rgba(248, 215, 218, 1)
     assert page.bkgr_Zip_code() == "rgba(248, 215, 218, 1)"
     
 # 5. Проверьте (assert), что остальные поля подсвечены зеленым. rgba(209, 231, 221, 1)
-    assert page.bkgr_First_name() == 'rgba(209, 231, 221, 1)'
-    assert page.bkgr_Last_name() == 'rgba(209, 231, 221, 1)'
-    assert page.bkgr_Address() == 'rgba(209, 231, 221, 1)'
-    assert page.bkgr_City() == 'rgba(209, 231, 221, 1)'
-    assert page.bkgr_Country() == 'rgba(209, 231, 221, 1)'
-    assert page.bkgr_Email() == 'rgba(209, 231, 221, 1)'
-    assert page.bkgr_Phone_number() == 'rgba(209, 231, 221, 1)'
-    assert page.bkgr_Job_position() == 'rgba(209, 231, 221, 1)'
-    assert page.bkgr_Company() == 'rgba(209, 231, 221, 1)'
+    assert page.bkgr_First_name() == "rgba(209, 231, 221, 1)"
+    assert page.bkgr_Last_name() == "rgba(209, 231, 221, 1)"
+    assert page.bkgr_Address() == "rgba(209, 231, 221, 1)"
+    assert page.bkgr_City() == "rgba(209, 231, 221, 1)"
+    assert page.bkgr_Country() == "rgba(209, 231, 221, 1)"
+    assert page.bkgr_Email() == "rgba(209, 231, 221, 1)"
+    assert page.bkgr_Phone_number() == "rgba(209, 231, 221, 1)"
+    assert page.bkgr_Job_position() == "rgba(209, 231, 221, 1)"
+    assert page.bkgr_Company() == "rgba(209, 231, 221, 1)"
