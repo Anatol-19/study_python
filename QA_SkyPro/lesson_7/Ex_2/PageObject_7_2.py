@@ -12,22 +12,24 @@ class СalculatorPage():
     
     def finder_CSS(self, select, timeout=10):
         return WebDriverWait(self.driver, timeout).until(
-            EC.visibility_of_element_located(By.CSS_SELECTOR, select)
+            EC.visibility_of_element_located((By.CSS_SELECTOR, select))
         )
         
-    def finder_Name(self, select, timeout=10):
-        return WebDriverWait(self.driver, timeout).until(
-            EC.visibility_of_element_located(By.NAME, select)
-        )
+    # def finder_Name(self, select, timeout=10):
+    #     return WebDriverWait(self.driver, timeout).until(
+    #         EC.visibility_of_element_located((By.NAME, select))
+    #     )
     
     def finder_Xpath(self, select, timeout=10):
         return WebDriverWait(self.driver, timeout).until(
-            EC.visibility_of_element_located(By.XPATH, select)
+            EC.visibility_of_element_located((By.XPATH, select))
         )
     
     # Поле Delay
     def type_Delay(self, delay):
-        return self.finder_CSS("#delay").send_keys(delay)
+        delay_field = self.finder_CSS("#delay")
+        delay_field.clear()
+        delay_field.send_keys(delay)
     
     # Кнопка Плюс
     def btn_plus(self):

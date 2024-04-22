@@ -1,3 +1,4 @@
+import time
 import pytest
 from PageObject_7_2 import СalculatorPage
 from selenium import webdriver
@@ -15,7 +16,7 @@ def browser():
     driver.quit()
     
 @pytest.mark.parametrize("delay", [
-    ("45")
+    (45)
 ])
 
 def test_Calk15(browser, delay):
@@ -37,5 +38,7 @@ def test_Calk15(browser, delay):
     page.btn_equally().click()
 
 # 4. Проверьте (assert), что в окне отобразится результат `15` через 45 секунд.
+
+    time.sleep(delay)
    
     assert page.btn_screen(delay).get_attribute("textContent") == "15"
