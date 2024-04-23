@@ -3,9 +3,8 @@ from selenium.webdriver.common.by import By
 url = ""
 
 class Shop_CardPage():
-    def __init__(self, browser, url):
+    def __init__(self, browser):
         self.driver = browser
-        self.driver.get(url)
     
     def find(self, select):
         finder = self.driver.find_element(By.CSS_SELECTOR, select)
@@ -29,5 +28,5 @@ class Shop_CardPage():
 
     # Прочтите со страницы итоговую стоимость ( `Total` ).
     def rd_total(self):
-        return self.find(".summary_info_label.summary_total_label").text
-    
+        return self.find('[class="summary_total_label"]').text
+    # .summary_info_label.summary_total_label
