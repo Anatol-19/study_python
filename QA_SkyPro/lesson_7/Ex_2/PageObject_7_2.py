@@ -32,19 +32,19 @@ class СalculatorPage():
     
     # Кнопка Плюс
     def btn_plus(self):
-        return self.finder_Xpath('//*[@id="calculator"]/div[2]/span[4]')
+        self.finder_Xpath('//*[@id="calculator"]/div[2]/span[4]').click()
     
     # Кнопка Равно
     def btn_equally(self):
-        return self.finder_Xpath('//*[@id="calculator"]/div[2]/span[15]')
+        self.finder_Xpath('//*[@id="calculator"]/div[2]/span[15]').click()
      
     # Кнопка 7
     def btn_seven(self):
-        return self.finder_Xpath('//*[@id="calculator"]/div[2]/span[1]')
+        self.finder_Xpath('//*[@id="calculator"]/div[2]/span[1]').click()
     
     # Кнопка 8
     def btn_eight(self):
-        return self.finder_Xpath('//*[@id="calculator"]/div[2]/span[2]')
+        self.finder_Xpath('//*[@id="calculator"]/div[2]/span[2]').click()
     
     # Окно с результатом
     def btn_screen(self, delay):

@@ -29,13 +29,13 @@ def test_Calk15(browser, delay):
     
 # 3. Нажмите на кнопки:
 ## 7
-    page.btn_seven().click()
+    page.btn_seven()
 ## +
-    page.btn_plus().click()
+    page.btn_plus()
 ## 8
-    page.btn_eight().click()
+    page.btn_eight()
 ## =
-    page.btn_equally().click()
+    page.btn_equally()
 
 # 4. Проверьте (assert), что в окне отобразится результат `15` через 45 секунд.
 
