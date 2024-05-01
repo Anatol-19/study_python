@@ -1,7 +1,29 @@
 import requests
 from EmployeeApi import EmployeeApi
+import jsonschema
 
 api = EmployeeApi("https://x-clients-be.onrender.com/")
+
+# Ожидаемая схема JSON
+expected_schema = {
+    "type": "object",
+    "properties": {
+        "id": {"type": "integer"},
+        "isActive": {"type": "boolean"},
+        "createDateTime": {"type": "string", "format": "date-time"},
+        "lastChangedDateTime": {"type": "string", "format": "date-time"},
+        "firstName": {"type": "string"},
+        "lastName": {"type": "string"},
+        "middleName": {"type": "string"},
+        "phone": {"type": "string"},
+        "email": {"type": ["string", "null"]}, 
+        # "email": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "birthdate": {"type": "string", "format": "date-time"},
+        "avatar_url": {"type": "string"},
+        "companyId": {"type": "integer"}
+    },
+    "required": ["id", "firstName", "lastName", "companyId", "phone", "birthdate", "avatar_url", "isActive"]
+}
    
 # **Задание. Напишите автотесты на методы приложения x-clients.** 
 # - [GET] /employee
@@ -9,9 +31,14 @@ def test_employee_list_active(Nomber_of_Company = 0):
     response = api.employee_list_active(Nomber_of_Company)
     assert response.status_code == 200
 #     - проверяющие обязательность полей.
+    for employee in response.json():
+        try:
+            jsonschema.validate(instance=employee, schema=expected_schema)
+        except jsonschema.ValidationError as e:
+            assert False, f"Validation error for employee {employee}: {e}"
 
 # - [POST] /employee
-def test_add_new_employee(Nomber_of_Company = -1):
+def test_add_new_employee(Nomber_of_Company = 0):
     body = api.employee_list_active(Nomber_of_Company).json()
     len_before = len(body)
 
@@ -22,21 +49,30 @@ def test_add_new_employee(Nomber_of_Company = -1):
     assert response.status_code == 201
     assert len_after == len_before + 1
 #     - проверяющие обязательность полей.
+    assert response.json()["id"] 
 
 # - [GET] /employee/{id}
-def test_get_one_employee(Nomber_of_Company = 0):
+def test_get_one_employee(Nomber_of_Company = -1):
     result = api.add_new_employee(Nomber_of_Company).json()
     new_id = result["id"]
     new_employee = api.get_employee(new_id)
     assert new_employee.status_code == 200
-    assert new_employee.json()["id"] == new_id
 #     - проверяющие обязательность полей.
+    try:
+        jsonschema.validate(instance=new_employee.json(), schema=expected_schema)
+    except jsonschema.ValidationError as e:
+        assert False, f"Validation error for employee {new_employee.json()}: {e}"
+    assert new_employee.json()["id"] == new_id
 
 # - [PATCH] /employee/{id}
 def test_employee_patch(Nomber_of_Company = 1):
     result = api.add_new_employee(Nomber_of_Company).json()
     new_id = result["id"]
-    patch_employee = api.patch_employee(new_id)
-    assert patch_employee.status_code == 200
-    # assert patch_employee.json()["id"] == new_id
-#     - проверяющие обязательность полей.
+    response, employee_patch = api.patch_employee(new_id)
+    assert response.status_code == 200
+    try:
+        jsonschema.validate(instance=response.json(), schema=expected_schema)
+    except jsonschema.ValidationError as e:
+        assert False, f"Validation error for employee {response.json()}: {e}"
+    for item in employee_patch:
+        assert employee_patch[item] == response.json()[item]

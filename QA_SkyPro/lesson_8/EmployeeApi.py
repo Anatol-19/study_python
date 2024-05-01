@@ -8,14 +8,16 @@ class EmployeeApi:
         self.url = url
 
     ## Авторизация
-    def x_clients_auth(self, user = "roxy", password = "animal-fairy"):
+    def x_clients_auth(self, user = "leyla", password = "water-fairy"):
         credentional = {
             "username": user,
             "password": password
         }
         response = requests.post(f'{self.url}auth/login', json=credentional)
         head = {
-            "x-client-token" : response.json()["userToken"]
+            "x-client-token" : response.json()["userToken"],
+            "Content-Type" : "application/json",
+            "accept" : "application/json"
         }
         return head
 
@@ -65,3 +67,4 @@ class EmployeeApi:
         }
         response = requests.get(f'{self.url}employee/{id_emp}', headers = head, json = employee_patch)
         return response
+    
