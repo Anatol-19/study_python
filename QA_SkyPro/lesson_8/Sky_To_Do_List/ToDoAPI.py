@@ -38,9 +38,24 @@ class SkyToDo:
         return requests.get(self.url)
     
 # - Получение конкретной задачи из списка.
-
+    def get_task(self, number):
+        task_list = self.get_list().json()
+        one_task = task_list[number]
+        return one_task
 
 # - Отметка задачи «Выполнена».
-
+    def task_done(self, task_url):
+        completed = {"completed" : True}
+        return requests.patch(f'{self.url}{task_url}', json = completed)
 
 # - Снятие отметки «Выполнена».
+    def task_not_done(self, task_url):
+        to_do = {"completed": False}
+        return requests.patch(f'{self.url}{task_url}', json = to_do)
+
+# Очистить список
+    def terminate_list(self):
+        task_list = self.get_list().json()
+        for i in range(0, len(task_list)):
+            url_t = task_list[i]["url"]
+            self.delete_task(url_t)

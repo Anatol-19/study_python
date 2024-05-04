@@ -38,7 +38,25 @@ def test_get_list():
     # assert to_do_list 
     
 # - Получение конкретной задачи из списка.
+def test_get_one_task(number = 0):
+    task_url = api.get_task(number)["url"]
+    task_id = api.get_task(number)["id"]
+    assert task_url == f'/{task_id}'
 
 # - Отметка задачи «Выполнена».
+def test_task_get_done(number = 0):
+    task_url = api.get_task(number)["url"]
+    response = api.task_done(task_url)
+    assert response.status_code == 200
+    assert response.json()["completed"] == True
 
 # - Снятие отметки «Выполнена».
+def test_task_to_do(number = -1):
+    task_url = api.get_task(number)["url"]
+    response = api.task_not_done(task_url)
+    assert response.status_code == 200
+    assert response.json()["completed"] == False
+
+def test_terminate_list():
+    api.terminate_list()
+    assert api.get_list().json() == []
