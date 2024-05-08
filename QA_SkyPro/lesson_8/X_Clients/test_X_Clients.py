@@ -1,3 +1,4 @@
+import pytest
 import requests
 from EmployeeApi import EmployeeApi
 import jsonschema
@@ -24,27 +25,47 @@ expected_schema = {
     },
     "required": ["id", "firstName", "lastName", "companyId", "phone", "birthdate", "avatar_url", "isActive"]
 }
+
+@pytest.fixture()
+# - перед началом теста создавать компанию, передавать её ID
+def add_test_company():
+    id_company = api.add_new_company()
+# - Удалить её после  тестов
+    yield api.delete_company(id_company)
+
+
+# def add_test_company():
+#     # Создаем компанию
+#     id_company = api.add_new_company()
+#     try:
+#         # Передаем ID компании в тесты
+#         yield id_company
+#     finally:
+#         # Удаляем компанию после завершения тестов
+#         api.delete_company(id_company)
+
+
    
 # **Задание. Напишите автотесты на методы приложения x-clients.** 
 # - [GET] /employee
-def test_employee_list_active(Nomber_of_Company = 0):
-    response = api.employee_list_active(Nomber_of_Company)
+def test_employee_list_active(id_company):
+    response = api.employee_list_active(id_company)
     assert response.status_code == 200
 #     - проверяющие обязательность полей.
-    for employee in response.json():
+    for employee in respons
         try:
             jsonschema.validate(instance=employee, schema=expected_schema)
         except jsonschema.ValidationError as e:
             assert False, f"Validation error for employee {employee}: {e}"
 
 # - [POST] /employee
-def test_add_new_employee(Nomber_of_Company = 0):
-    body = api.employee_list_active(Nomber_of_Company).json()
+def test_add_new_employee(id_company):
+    body = api.employee_list_active(id_company).json()
     len_before = len(body)
 
-    response = api.add_new_employee(Nomber_of_Company)
+    response = api.add_new_employee(id_company)
 
-    body = api.employee_list_active(Nomber_of_Company).json()
+    body = api.employee_list_active(id_company).json()
     len_after = len(body)
     assert response.status_code == 201
     assert len_after == len_before + 1
@@ -52,8 +73,8 @@ def test_add_new_employee(Nomber_of_Company = 0):
     assert response.json()["id"] 
 
 # - [GET] /employee/{id}
-def test_get_one_employee(Nomber_of_Company = -1):
-    result = api.add_new_employee(Nomber_of_Company).json()
+def test_get_one_employee(id_company):
+    result = api.add_new_employee(id_company).json()
     new_id = result["id"]
     new_employee = api.get_employee(new_id)
     assert new_employee.status_code == 200
@@ -65,8 +86,8 @@ def test_get_one_employee(Nomber_of_Company = -1):
     assert new_employee.json()["id"] == new_id
 
 # - [PATCH] /employee/{id}
-def test_employee_patch(Nomber_of_Company = 1):
-    result = api.add_new_employee(Nomber_of_Company).json()
+def test_employee_patch(id_company):
+    result = api.add_new_employee(id_company).json()
     new_id = result["id"]
     response, employee_patch = api.patch_employee(new_id)
     assert response.status_code == 200

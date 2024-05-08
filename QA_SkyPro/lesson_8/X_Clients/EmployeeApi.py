@@ -26,6 +26,16 @@ class EmployeeApi:
         response = requests.get(f'{self.url}company', params = params_to_add)
         company_list = response.json()
         return company_list
+    
+    ## Создание новой компании
+    def add_new_company(self):
+        company = {
+            "name" : fake.company(),
+            "description" : fake.text(length=19)
+        }
+        head = self.x_clients_auth()
+        response = requests.post(f'{self.url}company', headers = head, json = company)
+        return response.json()["id"]
 
     ## Список сотрудников компании
     def employee_list_active(self, Nomber_of_Company = 0):
@@ -34,14 +44,15 @@ class EmployeeApi:
         return response
     
     ## Новый Сотрудник
-    def add_new_employee(self, Nomber_of_Company = 0):
+    def add_new_employee(self, id_company):
         head = self.x_clients_auth()
+        # id_company = self.add_new_company()
         employee_new = {
             "id": 0,
             "firstName": fake.unique.first_name(),
             "lastName": fake.last_name(),
             "middleName": fake.last_name(),
-            "companyId": self.get_list_company({'active' : 'true'})[Nomber_of_Company]['id'],
+            "companyId": id_company,
             "email": fake.unique.email(),
             "url": fake.url(),
             "phone": fake.phone_number(),
