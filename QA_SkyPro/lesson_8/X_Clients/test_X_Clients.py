@@ -17,7 +17,7 @@ expected_schema = {
         "lastName": {"type": "string"},
         "middleName": {"type": "string"},
         "phone": {"type": "string"},
-        "email": {"type": ["string", "null"]}, 
+        "email": {"type": ["string", "null"]},
         # "email": {"anyOf": [{"type": "string"}, {"type": "null"}]},
         "birthdate": {"type": "string", "format": "date-time"},
         "avatar_url": {"type": "string"},
@@ -26,12 +26,14 @@ expected_schema = {
     "required": ["id", "firstName", "lastName", "companyId", "phone", "birthdate", "avatar_url", "isActive"]
 }
 
+
 @pytest.fixture()
 # - перед началом теста создавать компанию, передавать её ID
 def add_test_company():
     id_company = api.add_new_company()
-# - Удалить её после  тестов
-    yield api.delete_company(id_company)
+    yield id_company
+    # - Удалить её после  тестов
+    api.delete_company(id_company)
 
 
 # def add_test_company():
@@ -45,18 +47,18 @@ def add_test_company():
 #         api.delete_company(id_company)
 
 
-   
-# **Задание. Напишите автотесты на методы приложения x-clients.** 
+# **Задание. Напишите автотесты на методы приложения x-clients.**
 # - [GET] /employee
 def test_employee_list_active(id_company):
     response = api.employee_list_active(id_company)
     assert response.status_code == 200
-#     - проверяющие обязательность полей.
-    for employee in respons
+    #     - проверяющие обязательность полей.
+    for employee in response:
         try:
             jsonschema.validate(instance=employee, schema=expected_schema)
         except jsonschema.ValidationError as e:
             assert False, f"Validation error for employee {employee}: {e}"
+
 
 # - [POST] /employee
 def test_add_new_employee(id_company):
@@ -69,8 +71,9 @@ def test_add_new_employee(id_company):
     len_after = len(body)
     assert response.status_code == 201
     assert len_after == len_before + 1
-#     - проверяющие обязательность полей.
-    assert response.json()["id"] 
+    #     - проверяющие обязательность полей.
+    assert response.json()["id"]
+
 
 # - [GET] /employee/{id}
 def test_get_one_employee(id_company):
@@ -78,12 +81,13 @@ def test_get_one_employee(id_company):
     new_id = result["id"]
     new_employee = api.get_employee(new_id)
     assert new_employee.status_code == 200
-#     - проверяющие обязательность полей.
+    #     - проверяющие обязательность полей.
     try:
         jsonschema.validate(instance=new_employee.json(), schema=expected_schema)
     except jsonschema.ValidationError as e:
         assert False, f"Validation error for employee {new_employee.json()}: {e}"
     assert new_employee.json()["id"] == new_id
+
 
 # - [PATCH] /employee/{id}
 def test_employee_patch(id_company):
