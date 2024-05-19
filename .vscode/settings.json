@@ -1,8 +1,0 @@
-{
-    "files.autoSave": "afterDelay",
-    "python.testing.pytestArgs": [
-        "QA_SkyPro"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
-}
