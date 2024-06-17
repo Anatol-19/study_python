@@ -43,15 +43,10 @@ class SkyToDo:
         one_task = task_list[number]
         return one_task
 
-# - Отметка задачи «Выполнена».
-    def task_done(self, task_url):
-        completed = {"completed" : True}
-        return requests.patch(f'{self.url}{task_url}', json = completed)
-
-# - Снятие отметки «Выполнена».
-    def task_not_done(self, task_url):
-        to_do = {"completed": False}
-        return requests.patch(f'{self.url}{task_url}', json = to_do)
+# - Снятие / Отметка задачи «Выполнена».
+    def task_done(self, task_url, donable=None):
+        isCompite = {"completed": donable}
+        return requests.patch(f'{self.url}{task_url}', json = isCompite)
 
 # Очистить список
     def terminate_list(self):

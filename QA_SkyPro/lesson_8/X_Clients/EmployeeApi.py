@@ -2,7 +2,7 @@ import requests
 from faker import Faker
 
 fake = Faker()
-
+# ToDo Пересмотреть реализайциии методов после создания тестовой компании в рамках фикстуры
 
 class EmployeeApi:
     def __init__(self, url):
@@ -32,11 +32,16 @@ class EmployeeApi:
     def add_new_company(self):
         company = {
             "name": fake.company(),
-            "description": fake.text(length=19)
+            "description": fake.text()
         }
         head = self.x_clients_auth()
         response = requests.post(f'{self.url}company', headers=head, json=company)
         return response.json()["id"]
+
+    ## Удаление комании
+    # ToDo Реализовать метод
+    def delete_company(self, id_company):
+        pass
 
     ## Список сотрудников компании
     def employee_list_active(self, Nomber_of_Company=0):
@@ -79,3 +84,4 @@ class EmployeeApi:
         }
         response = requests.get(f'{self.url}employee/{id_emp}', headers=head, json=employee_patch)
         return response
+

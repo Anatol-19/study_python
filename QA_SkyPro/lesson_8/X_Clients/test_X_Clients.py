@@ -29,7 +29,7 @@ expected_schema = {
 
 @pytest.fixture()
 # - перед началом теста создавать компанию, передавать её ID
-def add_test_company():
+def id_company():
     id_company = api.add_new_company()
     yield id_company
     # - Удалить её после  тестов

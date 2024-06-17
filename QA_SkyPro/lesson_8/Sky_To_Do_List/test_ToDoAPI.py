@@ -43,19 +43,19 @@ def test_get_one_task(number = 0):
     task_id = api.get_task(number)["id"]
     assert task_url == f'/{task_id}'
 
-# - Отметка задачи «Выполнена».
-def test_task_get_done(number = 0):
+def task_is_to_do(number = -1, donable=None):
     task_url = api.get_task(number)["url"]
-    response = api.task_done(task_url)
+    response = api.task_done(task_url, donable)
     assert response.status_code == 200
-    assert response.json()["completed"] == True
+    assert response.json()["completed"] == donable
+
+# - Отметка задачи «Выполнена».
+def test_task_get_done():
+    task_is_to_do(0,True)
 
 # - Снятие отметки «Выполнена».
-def test_task_to_do(number = -1):
-    task_url = api.get_task(number)["url"]
-    response = api.task_not_done(task_url)
-    assert response.status_code == 200
-    assert response.json()["completed"] == False
+def test_task_to_do():
+    task_is_to_do(-1, False)
 
 def test_terminate_list():
     api.terminate_list()
