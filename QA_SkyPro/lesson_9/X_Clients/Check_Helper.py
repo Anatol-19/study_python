@@ -41,6 +41,12 @@ class Check_Helper:
         """
         Сравнивает один элемент из ответа API с элементом из БД.
         """
+        # Если db_item — список, извлекаем первый элемент
+        if isinstance(db_item, list) and len(db_item) > 0:
+            db_item = db_item[0]
+        elif not isinstance(db_item, dict):
+            raise TypeError("db_item должен быть словарем или списком словарей")
+
         # Сравниваем значения полей
         for key in api_item:
             api_value = api_item[key]
@@ -84,5 +90,8 @@ class Check_Helper:
 
     def check_api_vs_data(self, api_response, data):
         for i in data:
-            assert api_response[i] == data[i]
-
+            if i == "id":
+                continue  # Игнорируем поле id, так как оно генерируется автоматически
+            api_value = api_response.get(i)
+            data_value = data[i]
+            assert api_value == data_value, f"Mismatch for {i}: API = {api_value}, Data = {data_value}"

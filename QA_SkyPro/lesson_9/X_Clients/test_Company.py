@@ -74,12 +74,10 @@ def test_delete():
     assert deleted["isActive"] is True
 
     rows = db.get_company_by_id(company_id)
-    body = api.get_list_companies()
+    assert len(rows) == 0, f"Expected no rows, but found {len(rows)}"
 
-    assert body[-1]["id"] != company_id
-    assert len(rows) == 0
-    # assert rows[0]["deleted_at"] is not None
-    # ToDo Дебаг проверки удаления
+    body = api.get_list_companies()
+    assert all(c["id"] != company_id for c in body), f"Company ID {company_id} found in company list"
 
 
 def test_deactivate():

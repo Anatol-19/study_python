@@ -2,7 +2,7 @@ import pytest
 import jsonschema
 from Config import *
 from Check_Helper import Check_Helper
-from X_Clients_Api import fake_employee
+from X_Clients_Api import fake_employee, fake_employee_patch
 
 ch = Check_Helper()
 
@@ -73,7 +73,7 @@ def test_employee_patch(company_id):
     employee_new = fake_employee(company_id)
     new_id = db.insert_new_employee(employee_new)
 
-    api_response = api.patch_employee(new_id)
+    api_response = api.patch_employee(new_id, fake_employee_patch())
     employee_patch = api_response.json()
     assert api_response.status_code == 200, f"Expected status code 200, but got {api_response.status_code}"
     try:

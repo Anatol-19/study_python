@@ -118,7 +118,7 @@ class CompanyApi:
     # Изменить информацию о сотруднике
     def patch_employee(self, id_emp, employee_patch):
         head = self.x_clients_auth()
-        response = requests.get(f'{self.url}employee/{id_emp}', headers=head, json=employee_patch)
+        response = requests.patch(f'{self.url}employee/{id_emp}', headers=head, json=employee_patch)
         return response
 
     # Удалить сотрудника
