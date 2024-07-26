@@ -2,7 +2,7 @@ import requests
 from faker import Faker
 
 fake = Faker()
-# ToDo Пересмотреть реализайциии методов после создания тестовой компании в рамках фикстуры
+# ToDo Пересмотреть реализации методов после создания тестовой компании в рамках фикстуры
 
 class EmployeeApi:
     def __init__(self, url):

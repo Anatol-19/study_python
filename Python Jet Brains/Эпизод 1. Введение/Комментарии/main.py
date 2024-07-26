@@ -1,5 +1,5 @@
 print("Hello World!")
 # аа
-print()
-print()
+# print()
+# print()
 # anjfgpansn

@@ -3,7 +3,6 @@ print(type(first_name))
 
 #
 age = 34
-is_male = True
 auto = None
 #
 print("преобразование типов")
@@ -15,3 +14,10 @@ float_number = 4.0
 print(float_number)
 print(type(float_number))
 print(int(float_number))
+print(float_number)
+print(type(float_number))
+
+is_male = True
+print(is_male)
+print(type(is_male))
+
